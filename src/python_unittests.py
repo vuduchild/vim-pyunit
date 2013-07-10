@@ -154,6 +154,37 @@ class SideBySideLayout(BaseTestLayout):
         return [self.glue_parts(parts)]
 
 
+class TestsSubdirLayout(BaseTestLayout):
+    SUBDIR_NAME = 'tests'
+
+    def is_test_file(self, some_file):
+        some_file = self.relatize(some_file)
+        parts = self.break_down(some_file)
+        if len(parts) >= 2:
+            filepart = parts[-1]
+            return filepart.startswith(self.prefix) and parts[-2] == self.SUBDIR_NAME
+        else:
+            return False
+
+    def get_test_file(self, source_file):
+        source_file_path = self.relatize(source_file)
+        parts = self.break_down(source_file_path)
+        source_file_name = parts[-1]
+        parts[-1] = self.SUBDIR_NAME
+        parts.append(self.prefix + source_file_name)
+        return self.glue_parts(parts)
+
+    def get_source_candidates(self, test_file):
+        test_file = self.relatize(test_file)
+        parts = self.break_down(test_file)
+        filepart = parts[-1]
+        if filepart.startswith(self.prefix) and parts[-2] == self.SUBDIR_NAME:
+            parts.pop(-2)
+        else:
+            raise RuntimeError("Not a test file.")
+        parts[-1] = filepart[len(self.prefix):]
+        return [self.glue_parts(parts)]
+
 class FlatLayout(BaseTestLayout):
     def is_test_file(self, some_file):
         some_file = self.relatize(some_file)
@@ -273,6 +304,7 @@ def get_implementing_class():
         'flat': FlatLayout,
         'follow-hierarchy': FollowHierarchyLayout,
         'side-by-side': SideBySideLayout,
+        'tests-subdir': TestsSubdirLayout,
         'nose': NoseLayout,
     }
     test_layout = vim.eval('g:PyUnitTestsStructure')
