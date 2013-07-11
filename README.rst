@@ -58,6 +58,10 @@ There are three options:
   source files.  Test files are prefixed with ``test_``.  For example, the
   test file for the source file ``foo/bar.py`` is called
   ``foo/test_bar.py``.  Use this setting when testing Django apps.
+* **tests-subdir**: Put test files next to their related source files,
+  in a subdirectory named ``tests``. Test files are prefixed with ``test_``.
+  For example, the test file for the source file ``foo/bar.py`` is called
+  ``foo/tests/test_bar.py``.
 * **follow-hierarchy**: Put all the test files in a separate test
   directory (specified by ``PyUnitTestsRoot``), but keep the same
   directory hierarchy as used in the source directory.
@@ -137,7 +141,7 @@ The plugin supports setting of the following variables:
 | ``PyUnitTestsRoot``           | The relative location where all tests live.    | directory spec            | "tests"                           |
 +-------------------------------+------------------------------------------------+---------------------------+-----------------------------------+
 | ``PyUnitTestsStructure``      | Specifies how you wish to organise your tests. | flat, follow-hierarchy,   | "follow-hierarchy"                |
-|                               |                                                | side-by-side              |                                   |
+|                               |                                                | side-by-side, tests-subdir|                                   |
 +-------------------------------+------------------------------------------------+---------------------------+-----------------------------------+
 | ``PyUnitTestsSplitWindow``    | Specifies where test files should be opened,   | left, right, top, bottom, | "right"                           |
 |                               | when oopened next to the source file. When set | no                        |                                   |
